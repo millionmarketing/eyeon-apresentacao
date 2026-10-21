@@ -96,11 +96,20 @@ button.done{background:var(--green)}
   <div class="grid" id="full"></div>
  </section>
 
+ <section>
+  <div class="section-head">
+   <div><h2>Pagamento no Pix</h2><p class="note">Para quem prefere Pix. Cada pagamento libera o plano por 1 mês ou 1 ano e <b>não renova sozinho</b>: 7 dias antes de vencer, o cliente recebe um e-mail para renovar. O link cobra o preço de fundador enquanto houver vagas e depois passa sozinho para o preço cheio. Na página da Stripe o cliente também pode pagar com cartão à vista.</p></div>
+   <span class="badge muted">PIX · PAGAMENTO POR PERÍODO</span>
+  </div>
+  <div class="grid" id="pix"></div>
+ </section>
+
  <div class="footer-box">
   <h3>Bom saber</h3>
   <ul>
    <li>Todos os planos incluem Radar de viralização, alertas e Eon no Telegram, análises com IA agendadas, relatórios e favoritos.</li>
    <li>O plano anual de fundador sai pelo preço de 10 meses (2 meses grátis).</li>
+   <li>Para cobrança automática todo mês ou todo ano, use os links de cartão. No Pix, o cliente paga de novo a cada período.</li>
    <li>Garantia de 7 dias ou o dinheiro de volta.</li>
    <li>Se o e-mail de acesso não chegar, o cliente usa “Esqueci minha senha” em eyeon.pro com o mesmo e-mail do pagamento (e confere o spam).</li>
    <li>Troca de plano, cartão, faturas e cancelamento ficam em eyeon.pro, no botão Plano.</li>
@@ -121,6 +130,7 @@ const PLANS=[
   founder:{monthly:[797,'https://buy.stripe.com/bJeaEW8kyduw6MW6tq6J209'],yearly:[7970,'https://buy.stripe.com/00wbJ0bwKeyAdbkbNK6J20b']},
   full:{monthly:[1197,'https://buy.stripe.com/8x2aEWfN08ac4EOeZW6J208'],yearly:[14364,'https://buy.stripe.com/8x200icAO6242wG3he6J20a']}}
 ];
+const PIX=key=>({monthly:'https://eyeon.pro/api/billing/pix?plan='+key+'&cycle=monthly',yearly:'https://eyeon.pro/api/billing/pix?plan='+key+'&cycle=yearly'});
 const brl=v=>'R$ '+v.toLocaleString('pt-BR');
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;};
 const toast=document.getElementById('toast');let timer;
@@ -129,8 +139,9 @@ async function copy(text,button,label){
  try{await navigator.clipboard.writeText(text);}catch{const area=el('textarea');area.value=text;document.body.append(area);area.select();document.execCommand('copy');area.remove();}
  button.classList.add('done');const before=button.textContent;button.textContent='Copiado!';notify(label);setTimeout(()=>{button.textContent=before;button.classList.remove('done');},1600);
 }
-function message(plan,cycle,founder,price,url){
+function message(plan,cycle,founder,price,url,pix=false){
  const period=cycle==='monthly'?'por mês':'por ano';
+ if(pix)return `Olá! Segue o link para pagar o Eyeon ${plan.name} no Pix: ${brl(price)} por ${cycle==='monthly'?'1 mês':'1 ano'} de acesso${founder?' (preço de fundador, enquanto houver vagas)':''}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: assim que o Pix for confirmado, você recebe um e-mail para criar sua senha e acessar eyeon.pro. Antes de vencer, enviamos um lembrete para renovar.`;
  return `Olá! Segue o link para assinar o Eyeon ${plan.name}${founder?' com preço de fundador':''}: ${brl(price)} ${period}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: logo depois do pagamento você recebe um e-mail para criar sua senha e acessar eyeon.pro.`;
 }
 function render(target,tier){
@@ -141,22 +152,23 @@ function render(target,tier){
   card.append(el('h3',null,plan.name),el('p','for',plan.for));
   const list=el('ul','features');plan.features.forEach(f=>list.append(el('li',null,f)));card.append(list);
   for(const cycle of ['monthly','yearly']){
-   const [price,url]=plan[tier][cycle],offer=el('div','offer'),top=el('div','offer-top');
+   const pix=tier==='pix',[price,url]=pix?[plan.founder[cycle][0],PIX(plan.key)[cycle]]:plan[tier][cycle],offer=el('div','offer'),top=el('div','offer-top');
    const amount=el('span','price',brl(price));amount.append(el('small',null,cycle==='monthly'?' /mês':' /ano'));
-   top.append(el('span','cycle',cycle==='monthly'?'MENSAL':'ANUAL'),amount);offer.append(top);
+   top.append(el('span','cycle',pix?(cycle==='monthly'?'PIX · 1 MÊS':'PIX · 1 ANO'):cycle==='monthly'?'MENSAL':'ANUAL'),amount);offer.append(top);
+   if(pix){offer.append(el('div','was',`fundador · depois ${brl(plan.full[cycle][0])}`));}
    if(tier==='founder'){const was=el('div','was');was.append('de ',el('s',null,brl(plan.full[cycle][0])),cycle==='yearly'?' · 2 meses grátis':'');offer.append(was);}
    const row=el('div','link'),input=el('input');input.readOnly=true;input.value=url;input.setAttribute('aria-label',`Link ${plan.name} ${cycle==='monthly'?'mensal':'anual'}`);input.onclick=()=>input.select();
-   const button=el('button','copy','Copiar link');button.type='button';button.onclick=()=>copy(url,button,`Link do ${plan.name} ${cycle==='monthly'?'mensal':'anual'} copiado.`);
+   const button=el('button','copy','Copiar link');button.type='button';button.onclick=()=>copy(url,button,`Link do ${plan.name} ${pix?'no Pix ':''}${cycle==='monthly'?'mensal':'anual'} copiado.`);
    row.append(input,button);offer.append(row);
    const actions=el('div','actions'),msg=el('button','msg','Copiar mensagem pronta');msg.type='button';
-   msg.onclick=()=>copy(message(plan,cycle,tier==='founder',price,url),msg,'Mensagem pronta copiada. É só colar no WhatsApp.');
+   msg.onclick=()=>copy(message(plan,cycle,tier!=='full',price,url,pix),msg,'Mensagem pronta copiada. É só colar no WhatsApp.');
    const open=el('a','open','Abrir ↗');open.href=url;open.target='_blank';open.rel='noopener';
    actions.append(msg,open);offer.append(actions);card.append(offer);
   }
   grid.append(card);
  }
 }
-render('founder','founder');render('full','full');
+render('founder','founder');render('full','full');render('pix','pix');
 </script>
 </body>
 </html>
