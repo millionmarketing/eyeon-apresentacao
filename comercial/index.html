@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eyeon · Links de venda</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="../assets/favicon.png">
+<style>
+@font-face{font-family:"Space Grotesk";src:url("../assets/fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf")}
+@font-face{font-family:Sora;src:url("../assets/fonts/Sora/Sora-VariableFont_wght.ttf")}
+:root{--dark:#0F0F11;--panel:rgba(255,255,255,.03);--red:#FF2222;--white:#fff;--line:rgba(255,255,255,.09);--muted:rgba(255,255,255,.52);--soft:rgba(255,255,255,.74);--green:#22C55E}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(circle at 85% 0%,rgba(255,34,34,.13),transparent 40%),var(--dark);color:var(--white);font-family:Sora,Arial,sans-serif;font-size:15px;line-height:1.5;min-height:100vh}
+.wrap{max-width:1120px;margin:0 auto;padding:40px 24px 64px}
+header{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.logo{height:38px;display:block}
+.tag{font-family:"Space Grotesk",sans-serif;font-size:12px;letter-spacing:.2em;color:var(--muted)}
+.overline{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px;letter-spacing:.22em;color:var(--red);display:flex;align-items:center;gap:10px;margin:44px 0 0}
+.overline:before{content:"";width:24px;height:2px;background:var(--red)}
+h1{font-family:"Space Grotesk",sans-serif;font-size:clamp(32px,5vw,48px);line-height:1.05;letter-spacing:-.04em;margin:14px 0 10px}
+h1 em{font-style:normal;color:var(--red)}
+.lead{color:var(--soft);max-width:760px;margin:0}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0 0;padding:0;list-style:none;counter-reset:step}
+.steps li{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:14px 16px;color:var(--soft);font-size:13.5px;counter-increment:step}
+.steps li:before{content:counter(step);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(255,34,34,.15);color:var(--red);font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px;margin-bottom:8px}
+.steps b{color:var(--white);font-weight:600}
+section{margin-top:52px}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+h2{font-family:"Space Grotesk",sans-serif;font-size:28px;letter-spacing:-.03em;margin:0}
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,34,34,.45);background:rgba(255,34,34,.1);color:#fff;border-radius:999px;padding:6px 14px;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:12px;letter-spacing:.12em}
+.badge i{width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 10px var(--red)}
+.badge.muted{border-color:var(--line);background:var(--panel);color:var(--soft)}
+.note{color:var(--muted);font-size:13.5px;margin:6px 0 0;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.plan{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012));border-radius:16px;padding:22px;display:flex;flex-direction:column;position:relative}
+.plan.featured{border-color:rgba(255,34,34,.5);background:linear-gradient(180deg,rgba(255,34,34,.12),rgba(255,34,34,.02) 60%)}
+.plan .pop{position:absolute;top:-12px;left:22px;background:var(--red);font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:11px;letter-spacing:.14em;padding:5px 11px;border-radius:999px}
+.plan h3{font-family:"Space Grotesk",sans-serif;font-size:24px;letter-spacing:-.02em;margin:0}
+.for{color:var(--muted);font-size:13px;margin:2px 0 14px}
+.features{list-style:none;padding:0;margin:0 0 18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--soft)}
+.features li:before{content:"✓";color:var(--red);margin-right:9px;font-weight:700}
+.offer{border-top:1px solid var(--line);padding-top:14px;margin-top:12px}
+.offer:first-of-type{margin-top:auto}
+.offer-top{display:flex;align-items:baseline;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.cycle{font-family:"Space Grotesk",sans-serif;font-size:12px;letter-spacing:.16em;color:var(--muted)}
+.price{font-family:"Space Grotesk",sans-serif;font-size:26px;font-weight:700;letter-spacing:-.03em}
+.price small{font-size:13px;color:var(--muted);font-weight:400;letter-spacing:0}
+.was{color:var(--muted);font-size:12.5px}
+.was s{text-decoration-color:var(--red);text-decoration-thickness:2px}
+.link{display:flex;gap:6px;margin-top:8px}
+.link input{flex:1;min-width:0;background:rgba(0,0,0,.3);border:1px solid var(--line);border-radius:8px;color:var(--soft);font:13px Sora,Arial,sans-serif;padding:9px 10px}
+.actions{display:flex;gap:6px;margin-top:6px}
+button{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px;border:0;border-radius:8px;padding:9px 12px;cursor:pointer;color:#fff;white-space:nowrap}
+.copy{background:var(--red)}.copy:hover{background:#e01b1b}
+.msg{background:rgba(255,255,255,.08);flex:1}.msg:hover{background:rgba(255,255,255,.14)}
+.open{background:none;color:var(--muted);padding:9px 6px;text-decoration:none;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px}
+.open:hover{color:#fff}
+button.done{background:var(--green)}
+.footer-box{margin-top:52px;border:1px solid var(--line);border-radius:14px;padding:20px 22px;background:var(--panel);color:var(--soft);font-size:14px}
+.footer-box h3{font-family:"Space Grotesk",sans-serif;margin:0 0 8px;color:#fff;font-size:17px}
+.footer-box ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;background:#1e1e21;border:1px solid var(--line);border-left:3px solid var(--green);padding:12px 18px;border-radius:8px;font-size:14px;transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.wrap{padding:28px 16px 48px}.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <header><img class="logo" src="../assets/eyeon-logo.png" alt="Eyeon"><span class="tag">USO INTERNO · COMERCIAL</span></header>
+
+ <div class="overline">LINKS DE VENDA</div>
+ <h1>Planos e links de <em>pagamento</em>.</h1>
+ <p class="lead">Copie o link do plano e envie ao cliente. O pagamento é feito na página segura da Stripe e o acesso é liberado automaticamente.</p>
+ <ol class="steps">
+  <li><b>Envie o link</b> do plano escolhido pelo cliente.</li>
+  <li><b>O cliente paga</b> com o e-mail que vai usar no Eyeon.</li>
+  <li><b>A conta é criada</b> sozinha, com o plano já ativo.</li>
+  <li><b>O cliente recebe um e-mail</b> para criar a senha e entrar em eyeon.pro.</li>
+ </ol>
+
+ <section>
+  <div class="section-head">
+   <div><h2>Preço de fundador</h2><p class="note">Para os 30 primeiros clientes, com o valor travado enquanto a assinatura estiver ativa. Quando as 30 vagas acabam, estes links deixam de funcionar sozinhos: use o preço cheio abaixo.</p></div>
+   <span class="badge"><i></i>SÓ 30 VAGAS</span>
+  </div>
+  <div class="grid" id="founder"></div>
+ </section>
+
+ <section>
+  <div class="section-head">
+   <div><h2>Preço cheio</h2><p class="note">Use depois que as vagas de fundador acabarem.</p></div>
+   <span class="badge muted">PREÇO REGULAR</span>
+  </div>
+  <div class="grid" id="full"></div>
+ </section>
+
+ <div class="footer-box">
+  <h3>Bom saber</h3>
+  <ul>
+   <li>Todos os planos incluem Radar de viralização, alertas e Eon no Telegram, análises com IA agendadas, relatórios e favoritos.</li>
+   <li>O plano anual de fundador sai pelo preço de 10 meses (2 meses grátis).</li>
+   <li>Garantia de 7 dias ou o dinheiro de volta.</li>
+   <li>Se o e-mail de acesso não chegar, o cliente usa “Esqueci minha senha” em eyeon.pro com o mesmo e-mail do pagamento (e confere o spam).</li>
+   <li>Troca de plano, cartão, faturas e cancelamento ficam em eyeon.pro, no botão Plano.</li>
+  </ul>
+ </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+// Links created by scripts/stripe-setup.cjs (Stripe live mode); each one charges the price shown next to it.
+const PLANS=[
+ {key:'pro',name:'Pro',for:'Para social media freelancer',features:['5 perfis monitorados','Coleta a cada 3 horas','3 workspaces','Eon AI ilimitado'],
+  founder:{monthly:[297,'https://buy.stripe.com/fZucN4eIWcqs4EO8By6J201'],yearly:[2970,'https://buy.stripe.com/4gM5kC44i4Y0efobNK6J203']},
+  full:{monthly:[497,'https://buy.stripe.com/cNibJ0cAOduw3AK6tq6J200'],yearly:[5964,'https://buy.stripe.com/aFa14mgR4bmob3c4li6J202']}},
+ {key:'studio',name:'Studio',for:'Para pequenas agências',featured:true,features:['10 perfis monitorados','Coleta a cada 2 horas','5 workspaces','Eon AI ilimitado'],
+  founder:{monthly:[497,'https://buy.stripe.com/4gMaEWcAO3TWfjs4li6J205'],yearly:[4970,'https://buy.stripe.com/fZu28qgR4cqs8V4eZW6J207']},
+  full:{monthly:[797,'https://buy.stripe.com/dRm28qbwK0HK5ISbNK6J204'],yearly:[9564,'https://buy.stripe.com/28EaEW30ebmoefocRO6J206']}},
+ {key:'agencia',name:'Agência',for:'Para agências estruturadas',features:['20 perfis monitorados','Coleta a cada 1 hora','Workspaces ilimitados','Eon AI ilimitado'],
+  founder:{monthly:[797,'https://buy.stripe.com/bJeaEW8kyduw6MW6tq6J209'],yearly:[7970,'https://buy.stripe.com/00wbJ0bwKeyAdbkbNK6J20b']},
+  full:{monthly:[1197,'https://buy.stripe.com/8x2aEWfN08ac4EOeZW6J208'],yearly:[14364,'https://buy.stripe.com/8x200icAO6242wG3he6J20a']}}
+];
+const brl=v=>'R$ '+v.toLocaleString('pt-BR');
+const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;};
+const toast=document.getElementById('toast');let timer;
+function notify(text){toast.textContent=text;toast.classList.add('show');clearTimeout(timer);timer=setTimeout(()=>toast.classList.remove('show'),2200);}
+async function copy(text,button,label){
+ try{await navigator.clipboard.writeText(text);}catch{const area=el('textarea');area.value=text;document.body.append(area);area.select();document.execCommand('copy');area.remove();}
+ button.classList.add('done');const before=button.textContent;button.textContent='Copiado!';notify(label);setTimeout(()=>{button.textContent=before;button.classList.remove('done');},1600);
+}
+function message(plan,cycle,founder,price,url){
+ const period=cycle==='monthly'?'por mês':'por ano';
+ return `Olá! Segue o link para assinar o Eyeon ${plan.name}${founder?' com preço de fundador':''}: ${brl(price)} ${period}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: logo depois do pagamento você recebe um e-mail para criar sua senha e acessar eyeon.pro.`;
+}
+function render(target,tier){
+ const grid=document.getElementById(target);
+ for(const plan of PLANS){
+  const card=el('article','plan'+(plan.featured?' featured':''));
+  if(plan.featured)card.append(el('span','pop','MAIS ESCOLHIDO'));
+  card.append(el('h3',null,plan.name),el('p','for',plan.for));
+  const list=el('ul','features');plan.features.forEach(f=>list.append(el('li',null,f)));card.append(list);
+  for(const cycle of ['monthly','yearly']){
+   const [price,url]=plan[tier][cycle],offer=el('div','offer'),top=el('div','offer-top');
+   const amount=el('span','price',brl(price));amount.append(el('small',null,cycle==='monthly'?' /mês':' /ano'));
+   top.append(el('span','cycle',cycle==='monthly'?'MENSAL':'ANUAL'),amount);offer.append(top);
+   if(tier==='founder'){const was=el('div','was');was.append('de ',el('s',null,brl(plan.full[cycle][0])),cycle==='yearly'?' · 2 meses grátis':'');offer.append(was);}
+   const row=el('div','link'),input=el('input');input.readOnly=true;input.value=url;input.setAttribute('aria-label',`Link ${plan.name} ${cycle==='monthly'?'mensal':'anual'}`);input.onclick=()=>input.select();
+   const button=el('button','copy','Copiar link');button.type='button';button.onclick=()=>copy(url,button,`Link do ${plan.name} ${cycle==='monthly'?'mensal':'anual'} copiado.`);
+   row.append(input,button);offer.append(row);
+   const actions=el('div','actions'),msg=el('button','msg','Copiar mensagem pronta');msg.type='button';
+   msg.onclick=()=>copy(message(plan,cycle,tier==='founder',price,url),msg,'Mensagem pronta copiada. É só colar no WhatsApp.');
+   const open=el('a','open','Abrir ↗');open.href=url;open.target='_blank';open.rel='noopener';
+   actions.append(msg,open);offer.append(actions);card.append(offer);
+  }
+  grid.append(card);
+ }
+}
+render('founder','founder');render('full','full');
+</script>
+</body>
+</html>
