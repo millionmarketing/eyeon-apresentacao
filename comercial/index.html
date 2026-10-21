@@ -82,7 +82,7 @@ button.done{background:var(--green)}
 
  <section>
   <div class="section-head">
-   <div><h2>Preço de fundador</h2><p class="note">Para os 30 primeiros clientes, com o valor travado enquanto a assinatura estiver ativa. Quando as 30 vagas acabam, estes links deixam de funcionar sozinhos: use o preço cheio abaixo.</p></div>
+   <div><h2>Preço de fundador</h2><p class="note">Oferta para os 30 primeiros clientes, com o valor travado enquanto a assinatura estiver ativa. Os links não têm trava: quando a oferta encerrar, passe a enviar os links de preço cheio.</p></div>
    <span class="badge"><i></i>SÓ 30 VAGAS</span>
   </div>
   <div class="grid" id="founder"></div>
@@ -90,7 +90,7 @@ button.done{background:var(--green)}
 
  <section>
   <div class="section-head">
-   <div><h2>Preço cheio</h2><p class="note">Use depois que as vagas de fundador acabarem.</p></div>
+   <div><h2>Preço cheio</h2><p class="note">Use quando quiser vender sem o desconto de fundador.</p></div>
    <span class="badge muted">PREÇO REGULAR</span>
   </div>
   <div class="grid" id="full"></div>
@@ -98,10 +98,13 @@ button.done{background:var(--green)}
 
  <section>
   <div class="section-head">
-   <div><h2>Pagamento no Pix</h2><p class="note">Para quem prefere Pix. Cada pagamento libera o plano por 1 mês ou 1 ano e <b>não renova sozinho</b>: 7 dias antes de vencer, o cliente recebe um e-mail para renovar. O link cobra o preço de fundador enquanto houver vagas e depois passa sozinho para o preço cheio. Na página da Stripe o cliente também pode pagar com cartão à vista.</p></div>
+   <div><h2>Pagamento no Pix</h2><p class="note">Para quem prefere Pix. Cada pagamento libera o plano por 1 mês ou 1 ano e <b>não renova sozinho</b>: 7 dias antes de vencer, o cliente recebe um e-mail para renovar. Há links no preço de fundador e no preço cheio. Na página da Stripe o cliente também pode pagar com cartão à vista.</p></div>
    <span class="badge muted">PIX · PAGAMENTO POR PERÍODO</span>
   </div>
+  <h3 style="font-family:'Space Grotesk',sans-serif;margin:0 0 12px">Pix · preço de fundador</h3>
   <div class="grid" id="pix"></div>
+  <h3 style="font-family:'Space Grotesk',sans-serif;margin:28px 0 12px">Pix · preço cheio</h3>
+  <div class="grid" id="pixFull"></div>
  </section>
 
  <div class="footer-box">
@@ -130,7 +133,7 @@ const PLANS=[
   founder:{monthly:[797,'https://buy.stripe.com/bJeaEW8kyduw6MW6tq6J209'],yearly:[7970,'https://buy.stripe.com/00wbJ0bwKeyAdbkbNK6J20b']},
   full:{monthly:[1197,'https://buy.stripe.com/8x2aEWfN08ac4EOeZW6J208'],yearly:[14364,'https://buy.stripe.com/8x200icAO6242wG3he6J20a']}}
 ];
-const PIX=key=>({monthly:'https://eyeon.pro/api/billing/pix?plan='+key+'&cycle=monthly',yearly:'https://eyeon.pro/api/billing/pix?plan='+key+'&cycle=yearly'});
+const PIX=(key,price)=>({monthly:`https://eyeon.pro/api/billing/pix?plan=${key}&cycle=monthly&price=${price}`,yearly:`https://eyeon.pro/api/billing/pix?plan=${key}&cycle=yearly&price=${price}`});
 const brl=v=>'R$ '+v.toLocaleString('pt-BR');
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;};
 const toast=document.getElementById('toast');let timer;
@@ -141,7 +144,7 @@ async function copy(text,button,label){
 }
 function message(plan,cycle,founder,price,url,pix=false){
  const period=cycle==='monthly'?'por mês':'por ano';
- if(pix)return `Olá! Segue o link para pagar o Eyeon ${plan.name} no Pix: ${brl(price)} por ${cycle==='monthly'?'1 mês':'1 ano'} de acesso${founder?' (preço de fundador, enquanto houver vagas)':''}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: assim que o Pix for confirmado, você recebe um e-mail para criar sua senha e acessar eyeon.pro. Antes de vencer, enviamos um lembrete para renovar.`;
+ if(pix)return `Olá! Segue o link para pagar o Eyeon ${plan.name} no Pix: ${brl(price)} por ${cycle==='monthly'?'1 mês':'1 ano'} de acesso${founder?' (preço de fundador)':''}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: assim que o Pix for confirmado, você recebe um e-mail para criar sua senha e acessar eyeon.pro. Antes de vencer, enviamos um lembrete para renovar.`;
  return `Olá! Segue o link para assinar o Eyeon ${plan.name}${founder?' com preço de fundador':''}: ${brl(price)} ${period}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: logo depois do pagamento você recebe um e-mail para criar sua senha e acessar eyeon.pro.`;
 }
 function render(target,tier){
@@ -152,23 +155,23 @@ function render(target,tier){
   card.append(el('h3',null,plan.name),el('p','for',plan.for));
   const list=el('ul','features');plan.features.forEach(f=>list.append(el('li',null,f)));card.append(list);
   for(const cycle of ['monthly','yearly']){
-   const pix=tier==='pix',[price,url]=pix?[plan.founder[cycle][0],PIX(plan.key)[cycle]]:plan[tier][cycle],offer=el('div','offer'),top=el('div','offer-top');
+   const pix=tier.startsWith('pix'),full=tier==='pixFull',[price,url]=pix?[plan[full?'full':'founder'][cycle][0],PIX(plan.key,full?'full':'founder')[cycle]]:plan[tier][cycle],offer=el('div','offer'),top=el('div','offer-top');
    const amount=el('span','price',brl(price));amount.append(el('small',null,cycle==='monthly'?' /mês':' /ano'));
    top.append(el('span','cycle',pix?(cycle==='monthly'?'PIX · 1 MÊS':'PIX · 1 ANO'):cycle==='monthly'?'MENSAL':'ANUAL'),amount);offer.append(top);
-   if(pix){offer.append(el('div','was',`fundador · depois ${brl(plan.full[cycle][0])}`));}
+   if(pix)offer.append(el('div','was',full?'preço cheio':`fundador · de ${brl(plan.full[cycle][0])}`));
    if(tier==='founder'){const was=el('div','was');was.append('de ',el('s',null,brl(plan.full[cycle][0])),cycle==='yearly'?' · 2 meses grátis':'');offer.append(was);}
    const row=el('div','link'),input=el('input');input.readOnly=true;input.value=url;input.setAttribute('aria-label',`Link ${plan.name} ${cycle==='monthly'?'mensal':'anual'}`);input.onclick=()=>input.select();
    const button=el('button','copy','Copiar link');button.type='button';button.onclick=()=>copy(url,button,`Link do ${plan.name} ${pix?'no Pix ':''}${cycle==='monthly'?'mensal':'anual'} copiado.`);
    row.append(input,button);offer.append(row);
    const actions=el('div','actions'),msg=el('button','msg','Copiar mensagem pronta');msg.type='button';
-   msg.onclick=()=>copy(message(plan,cycle,tier!=='full',price,url,pix),msg,'Mensagem pronta copiada. É só colar no WhatsApp.');
+   msg.onclick=()=>copy(message(plan,cycle,tier==='founder'||tier==='pix',price,url,pix),msg,'Mensagem pronta copiada. É só colar no WhatsApp.');
    const open=el('a','open','Abrir ↗');open.href=url;open.target='_blank';open.rel='noopener';
    actions.append(msg,open);offer.append(actions);card.append(offer);
   }
   grid.append(card);
  }
 }
-render('founder','founder');render('full','full');render('pix','pix');
+render('founder','founder');render('full','full');render('pix','pix');render('pixFull','pixFull');
 </script>
 </body>
 </html>
