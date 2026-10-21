@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eyeon · Programa Fundador</title>
+<link rel="icon" href="assets/favicon.png">
+<style>
+@font-face{font-family:"Space Grotesk";src:url("assets/fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf")}
+@font-face{font-family:Sora;src:url("assets/fonts/Sora/Sora-VariableFont_wght.ttf")}
+:root{--dark:#0F0F11;--panel:#141416;--red:#FF2222;--white:#fff;--line:rgba(255,255,255,.09);--muted:rgba(255,255,255,.5);--soft:rgba(255,255,255,.72);--green:#22C55E}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#09090a;color:var(--white);font-family:Sora,Arial,sans-serif;overflow:hidden}
+/* Each slide is drawn at 1600×900 and scaled to the window, so text and layout keep their proportions on any screen. */
+.deck{position:fixed;inset:0;display:grid;place-items:center}
+.slide{position:absolute;width:1600px;height:900px;left:50%;top:50%;transform:translate(-50%,-50%) scale(var(--scale,1));transform-origin:center;
+ background:radial-gradient(circle at 82% 18%,rgba(255,34,34,.12),transparent 34%),radial-gradient(circle at 8% 100%,rgba(255,34,34,.07),transparent 30%),var(--dark);
+ overflow:hidden;padding:72px 96px;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .45s ease}
+.slide.active{opacity:1;pointer-events:auto}
+.slide:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(circle at 80% 20%,#000,transparent 60%);pointer-events:none}
+.rings{position:absolute;right:-180px;top:-200px;width:720px;height:720px;pointer-events:none}
+.rings i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,34,34,.12);border-radius:50%}
+.rings i:nth-child(1){width:260px;height:260px}.rings i:nth-child(2){width:460px;height:460px}.rings i:nth-child(3){width:680px;height:680px}
+.rings b{position:absolute;width:7px;height:7px;border-radius:50%;background:var(--red);box-shadow:0 0 14px var(--red)}
+.top{display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1}
+.logo{height:46px;display:block}
+.page{font-family:"Space Grotesk",sans-serif;font-size:15px;letter-spacing:.2em;color:var(--muted)}
+.overline{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:16px;letter-spacing:.24em;color:var(--red);display:flex;align-items:center;gap:12px;margin:44px 0 0;position:relative;z-index:1}
+.overline:before{content:"";width:28px;height:2px;background:var(--red)}
+h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:62px;line-height:1.02;letter-spacing:-.045em;margin:18px 0 0;max-width:1100px;position:relative;z-index:1}
+h1 em{font-style:normal;color:var(--red)}
+.lead{font-size:20px;line-height:1.55;color:var(--soft);margin:16px 0 36px;max-width:1040px;position:relative;z-index:1}
+.dot{color:var(--red)}
+
+/* Plan cards */
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:auto;position:relative;z-index:1}
+.plan{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));border-radius:18px;padding:30px 32px;display:flex;flex-direction:column;position:relative}
+.plan.featured{border-color:rgba(255,34,34,.55);background:linear-gradient(180deg,rgba(255,34,34,.13),rgba(255,34,34,.03) 55%,rgba(255,255,255,.012));box-shadow:0 30px 80px -30px rgba(255,34,34,.45)}
+.badge{position:absolute;top:-15px;left:32px;background:var(--red);color:#fff;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;padding:7px 14px;border-radius:999px}
+.plan-name{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:30px;letter-spacing:-.02em}
+.plan-for{color:var(--muted);font-size:16px;margin-top:4px}
+.features{list-style:none;padding:0;margin:24px 0 0;display:flex;flex-direction:column;gap:12px}
+.features li{display:flex;align-items:center;gap:12px;font-size:18px;color:var(--soft)}
+.features li strong{color:var(--white);font-weight:600}
+.features svg{width:20px;height:20px;flex:none;color:var(--red)}
+.price{margin-top:26px;padding-top:22px;border-top:1px solid var(--line);display:flex;align-items:baseline;gap:8px}
+.price strong{font-family:"Space Grotesk",sans-serif;font-size:50px;letter-spacing:-.04em;line-height:1}
+.price span{color:var(--muted);font-size:18px}
+.everyone{margin-top:22px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:16px;position:relative;z-index:1}
+.everyone b{color:var(--soft);font-weight:600}
+.everyone i{width:5px;height:5px;border-radius:50%;background:var(--red);display:inline-block}
+
+/* Bonus: profile shield */
+.bonus{display:grid;grid-template-columns:1fr 600px;gap:64px;align-items:center;margin-top:auto;margin-bottom:auto;padding-top:20px;position:relative;z-index:1}
+.bonus h1{font-size:58px;margin-top:14px}
+.bonus .lead{margin:16px 0 28px}
+.guarantees{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:16px}
+.guarantees li{display:flex;align-items:flex-start;gap:14px;font-size:19px;line-height:1.45;color:var(--soft)}
+.guarantees li strong{color:var(--white);font-weight:600}
+.guarantees svg{width:22px;height:22px;flex:none;color:var(--red);margin-top:2px}
+.bonus-value{margin-top:30px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.free{background:rgba(34,197,94,.12);color:var(--green);border-radius:999px;padding:8px 16px;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:17px;letter-spacing:.06em}
+.mock{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012));border-radius:20px;padding:26px 28px 30px;box-shadow:0 40px 90px -40px rgba(0,0,0,.9)}
+.mock-bar{display:flex;align-items:center;gap:7px;margin-bottom:22px}
+.mock-bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.14)}
+.mock-bar span{margin-left:10px;color:var(--muted);font-size:14px;letter-spacing:.04em}
+.mock-label{font-family:"Space Grotesk",sans-serif;font-size:14px;letter-spacing:.16em;color:var(--muted)}
+.mock-input{margin-top:10px;display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:rgba(0,0,0,.25);border-radius:12px;padding:16px 18px;font-size:20px}
+.mock-input .at{color:var(--muted)}
+.mock-input .caret{width:2px;height:24px;background:var(--white);animation:pulse 1s infinite}
+.mock-btn{margin-left:auto;background:rgba(255,255,255,.08);color:var(--muted);border-radius:9px;padding:9px 16px;font-size:15px}
+.blocked{margin-top:18px;border:1px solid rgba(255,34,34,.5);background:linear-gradient(140deg,rgba(255,34,34,.16),rgba(255,34,34,.04));border-radius:14px;padding:20px 22px;display:flex;gap:16px;align-items:flex-start}
+.blocked .benefit-icon{flex:none}
+.blocked strong{display:block;font-family:"Space Grotesk",sans-serif;font-size:22px;letter-spacing:-.01em}
+.blocked p{margin:6px 0 0;color:var(--soft);font-size:16px;line-height:1.5}
+.mock-rows{margin-top:22px;display:flex;flex-direction:column;gap:10px}
+.mock-rows div{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:16px}
+.mock-rows i{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.06);display:grid;place-items:center;color:var(--red)}
+.mock-rows i svg{width:16px;height:16px}
+.mock-rows s{text-decoration-color:rgba(255,34,34,.7)}
+
+/* Founder benefits */
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:auto;position:relative;z-index:1}
+.benefit{border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:16px;padding:24px 26px 26px}
+.benefit.key{border-color:rgba(255,34,34,.5);background:linear-gradient(140deg,rgba(255,34,34,.16),rgba(255,34,34,.03))}
+.benefit-icon{width:48px;height:48px;border-radius:13px;display:grid;place-items:center;background:rgba(255,34,34,.12);border:1px solid rgba(255,34,34,.28);color:var(--red)}
+.benefit-icon svg{width:24px;height:24px}
+.benefit h3{font-family:"Space Grotesk",sans-serif;font-size:23px;letter-spacing:-.02em;margin:16px 0 6px}
+.benefit p{margin:0;color:var(--muted);font-size:17px;line-height:1.5}
+.seats{display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,34,34,.45);background:rgba(255,34,34,.1);border-radius:999px;padding:9px 18px;font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:16px;letter-spacing:.06em;position:relative;z-index:1;width:max-content}
+.overline-row{display:flex;align-items:center;gap:22px;margin-top:44px}.overline-row .overline{margin:0}
+.benefits{margin-top:auto;padding-top:36px}
+.seats i{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 12px var(--red);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+
+/* Founder prices */
+.was{font-size:20px;color:var(--muted);margin-top:24px}
+.was s{text-decoration-color:var(--red);text-decoration-thickness:2px}
+.founder .price{margin-top:6px;padding-top:0;border-top:0}
+.founder .price strong{font-size:62px}
+.annual{color:var(--muted);font-size:17px;margin-top:8px}
+.annual b{color:#fff;font-weight:600}
+.annual s{text-decoration-color:var(--red);text-decoration-thickness:2px}
+.summary{color:var(--soft);font-size:17px;margin-top:18px;padding-top:18px;border-top:1px solid var(--line)}
+.closing{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:30px;position:relative;z-index:1}
+.closing p{margin:0;color:var(--soft);font-size:18px;display:flex;align-items:center;gap:22px}
+.closing p span{display:flex;align-items:center;gap:10px}
+.closing svg{width:20px;height:20px;color:var(--red)}
+
+/* Navigation */
+.nav{position:fixed;bottom:16px;right:16px;display:flex;transition:opacity .3s;align-items:center;gap:10px;z-index:5;background:rgba(20,20,22,.85);border:1px solid var(--line);border-radius:999px;padding:8px 10px;backdrop-filter:blur(8px)}
+.nav button{border:0;background:none;color:var(--soft);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+.nav button:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav svg{width:18px;height:18px}
+.dots{display:flex;gap:7px}
+.dots span{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.22);cursor:pointer;transition:.2s}
+.dots span.on{background:var(--red);width:22px;border-radius:4px}
+body.idle .nav{opacity:0;pointer-events:none}body.idle{cursor:none}
+svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media print{
+ @page{size:1600px 900px;margin:0}
+ html,body{overflow:visible;height:auto;background:var(--dark)}
+ .deck{position:static;display:block}
+ .slide{position:relative;left:0;top:0;transform:none;opacity:1;page-break-after:always;break-after:page}
+ .nav{display:none}
+ .seats i{animation:none}
+ *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+ <symbol id="check" viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></symbol>
+ <symbol id="lock" viewBox="0 0 24 24"><rect x="4.5" y="10.5" width="15" height="10" rx="2.2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></symbol>
+ <symbol id="rocket" viewBox="0 0 24 24"><path d="M5 15c-1.5 1.5-2 5-2 5s3.5-.5 5-2M9 15l-3-3c1.5-4.5 5.5-8.5 13-9-.5 7.5-4.5 11.5-9 13Z"/><circle cx="15" cy="9" r="1.6"/></symbol>
+ <symbol id="chart" viewBox="0 0 24 24"><path d="M4 19h16M7 16v-4M12 16V8M17 16v-7"/></symbol>
+ <symbol id="live" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2.5"/><path d="m16 10.5 5-3v9l-5-3"/><circle cx="7" cy="9.5" r="1" fill="currentColor"/></symbol>
+ <symbol id="star" viewBox="0 0 24 24"><path d="m12 3.4 2.6 5.3 5.9.86-4.27 4.15 1 5.86L12 16.8l-5.26 2.77 1-5.86L3.5 9.56l5.9-.86L12 3.4Z"/></symbol>
+ <symbol id="medal" viewBox="0 0 24 24"><circle cx="12" cy="14" r="5.5"/><path d="M8.5 9.5 6 3h4l2 4 2-4h4l-2.5 6.5"/></symbol>
+ <symbol id="shield" viewBox="0 0 24 24"><path d="M12 3.2 5 6v5.6c0 4.3 2.9 7.8 7 9.2 4.1-1.4 7-4.9 7-9.2V6l-7-2.8Z"/><path d="m9 12 2.1 2.1L15.2 10"/></symbol>
+ <symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+ <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+ <symbol id="left" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+ <symbol id="right" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+</svg>
+
+<main class="deck">
+
+ <!-- 1. The value, at the full price: the anchor. -->
+ <section class="slide active" aria-label="Os planos do Eyeon">
+  <div class="rings"><i></i><i></i><i></i><b style="left:190px;top:330px"></b><b style="left:470px;top:560px"></b></div>
+  <div class="top"><img class="logo" src="assets/eyeon-logo.png" alt="Eyeon"><span class="page">01 / 04</span></div>
+  <div class="overline">PLANOS EYEON</div>
+  <h1>Veja o que vai viralizar <em>antes de todo mundo</em><span class="dot">.</span></h1>
+  <p class="lead">Monitoramento de Instagram com IA para quem vive de resultado: seguidores, posts, viralização e alertas em tempo real.</p>
+  <div class="plans">
+   <article class="plan">
+    <div class="plan-name">Pro</div><div class="plan-for">Para social media freelancer</div>
+    <ul class="features">
+     <li><svg><use href="#check"/></svg><span><strong>5 perfis</strong> monitorados</span></li>
+     <li><svg><use href="#check"/></svg><span>Coleta a cada <strong>3 horas</strong></span></li>
+     <li><svg><use href="#check"/></svg><span>3 workspaces</span></li>
+     <li><svg><use href="#check"/></svg><span>Eon AI <strong>Ilimitado</strong></span></li>
+    </ul>
+    <div class="price"><strong>R$ 497</strong><span>/mês</span></div>
+    <div class="annual">R$ 5.964 por ano</div>
+   </article>
+   <article class="plan featured">
+    <span class="badge">MAIS ESCOLHIDO</span>
+    <div class="plan-name">Studio</div><div class="plan-for">Para pequenas agências</div>
+    <ul class="features">
+     <li><svg><use href="#check"/></svg><span><strong>10 perfis</strong> monitorados</span></li>
+     <li><svg><use href="#check"/></svg><span>Coleta a cada <strong>2 horas</strong></span></li>
+     <li><svg><use href="#check"/></svg><span>5 workspaces</span></li>
+     <li><svg><use href="#check"/></svg><span>Eon AI <strong>Ilimitado</strong></span></li>
+    </ul>
+    <div class="price"><strong>R$ 797</strong><span>/mês</span></div>
+    <div class="annual">R$ 9.564 por ano</div>
+   </article>
+   <article class="plan">
+    <div class="plan-name">Agência</div><div class="plan-for">Para agências estruturadas</div>
+    <ul class="features">
+     <li><svg><use href="#check"/></svg><span><strong>20 perfis</strong> monitorados</span></li>
+     <li><svg><use href="#check"/></svg><span>Coleta a cada <strong>1 hora</strong></span></li>
+     <li><svg><use href="#check"/></svg><span>Workspaces <strong>ilimitados</strong></span></li>
+     <li><svg><use href="#check"/></svg><span>Eon AI <strong>Ilimitado</strong></span></li>
+    </ul>
+    <div class="price"><strong>R$ 1.197</strong><span>/mês</span></div>
+    <div class="annual">R$ 14.364 por ano</div>
+   </article>
+  </div>
+  <div class="everyone"><b>Em todos os planos:</b> Radar de viralização <i></i> Alertas e Eon no Telegram <i></i> Análises com IA agendadas <i></i> Relatórios e favoritos</div>
+ </section>
+
+ <!-- 2. What founders get, before the price. -->
+ <section class="slide" aria-label="Programa Fundador">
+  <div class="rings"><i></i><i></i><i></i><b style="left:250px;top:160px"></b><b style="left:520px;top:470px"></b></div>
+  <div class="top"><img class="logo" src="assets/eyeon-logo.png" alt="Eyeon"><span class="page">02 / 04</span></div>
+  <div class="overline-row"><div class="overline">PROGRAMA FUNDADOR</div><div class="seats"><i></i>SÓ 30 VAGAS</div></div>
+  <h1>Quem entra agora <em>constrói o Eyeon</em> com a gente<span class="dot">.</span></h1>
+  <div class="benefits">
+   <article class="benefit key"><span class="benefit-icon"><svg><use href="#lock"/></svg></span><h3>Preço travado para sempre</h3><p>Seu valor de fundador não sobe enquanto a assinatura estiver ativa.</p></article>
+   <article class="benefit"><span class="benefit-icon"><svg><use href="#rocket"/></svg></span><h3>Onboarding 1:1</h3><p>Configuramos seus perfis, workspaces e alertas junto com você.</p></article>
+   <article class="benefit"><span class="benefit-icon"><svg><use href="#chart"/></svg></span><h3>Diagnóstico inicial</h3><p>O que já funciona nos seus perfis e o que testar primeiro.</p></article>
+   <article class="benefit"><span class="benefit-icon"><svg><use href="#live"/></svg></span><h3>Mentoria mensal ao vivo</h3><p>Todo mês, uma sessão com o fundador: os posts que viralizaram e o que replicar.</p></article>
+   <article class="benefit"><span class="benefit-icon"><svg><use href="#star"/></svg></span><h3>Acesso antecipado</h3><p>Primeiro a usar as novidades: concorrentes, relatório em PDF e WhatsApp.</p></article>
+   <article class="benefit"><span class="benefit-icon"><svg><use href="#medal"/></svg></span><h3>Selo Fundador</h3><p>Sua conta marcada como uma das primeiras do Eyeon.</p></article>
+  </div>
+ </section>
+
+ <!-- 3. The founder price, against the anchor. -->
+ <section class="slide" aria-label="Preço de fundador">
+  <div class="rings"><i></i><i></i><i></i><b style="left:200px;top:300px"></b><b style="left:560px;top:420px"></b></div>
+  <div class="top"><img class="logo" src="assets/eyeon-logo.png" alt="Eyeon"><span class="page">03 / 04</span></div>
+  <div class="overline">SEU PREÇO DE FUNDADOR</div>
+  <h1>O mesmo Eyeon, por <em>muito menos</em><span class="dot">.</span></h1>
+  <p class="lead">Para os 30 primeiros, com o preço travado para sempre enquanto a assinatura estiver ativa.</p>
+  <div class="plans founder">
+   <article class="plan">
+    <div class="plan-name">Pro</div><div class="plan-for">5 perfis · coleta a cada 3 h</div>
+    <div class="was">de <s>R$ 497</s> por</div>
+    <div class="price"><strong>R$ 297</strong><span>/mês</span></div>
+    <div class="annual">Anual: de <s>R$ 5.964</s> por <b>R$ 2.970</b></div>
+   </article>
+   <article class="plan featured">
+    <span class="badge">MAIS ESCOLHIDO</span>
+    <div class="plan-name">Studio</div><div class="plan-for">10 perfis · coleta a cada 2 h</div>
+    <div class="was">de <s>R$ 797</s> por</div>
+    <div class="price"><strong>R$ 497</strong><span>/mês</span></div>
+    <div class="annual">Anual: de <s>R$ 9.564</s> por <b>R$ 4.970</b></div>
+   </article>
+   <article class="plan">
+    <div class="plan-name">Agência</div><div class="plan-for">20 perfis · coleta a cada 1 h</div>
+    <div class="was">de <s>R$ 1.197</s> por</div>
+    <div class="price"><strong>R$ 797</strong><span>/mês</span></div>
+    <div class="annual">Anual: de <s>R$ 14.364</s> por <b>R$ 7.970</b></div>
+   </article>
+  </div>
+  <div class="closing">
+   <p><span><svg><use href="#clock"/></svg>Só 30 vagas de fundador</span><span><svg><use href="#shield"/></svg>Garantia de 7 dias ou seu dinheiro de volta</span></p>
+  </div>
+ </section>
+
+ <!-- 4. The exclusive bonus: other Eyeon accounts can't analyze a founder's profiles. -->
+ <section class="slide" aria-label="Bônus exclusivo: Blindagem do perfil">
+  <div class="rings"><i></i><i></i><i></i><b style="left:230px;top:250px"></b><b style="left:500px;top:520px"></b></div>
+  <div class="top"><img class="logo" src="assets/eyeon-logo.png" alt="Eyeon"><span class="page">04 / 04</span></div>
+  <div class="bonus">
+   <div>
+    <div class="overline-row" style="margin-top:0"><div class="overline">BÔNUS EXCLUSIVO</div><div class="seats"><i></i>SÓ PARA OS 30 PRIMEIROS</div></div>
+    <h1>Blindagem do perfil<span class="dot">:</span> <em>ninguém analisa</em> o que é seu<span class="dot">.</span></h1>
+    <p class="lead">Os perfis que você cadastrar ficam fechados dentro do Eyeon: nenhum outro usuário consegue monitorar, comparar ou estudar.</p>
+    <ul class="guarantees">
+     <li><svg><use href="#lock"/></svg><span><strong>Concorrente não monitora</strong> seus perfis nem os dos seus clientes.</span></li>
+     <li><svg><use href="#shield"/></svg><span><strong>Sua estratégia fica com você:</strong> posts, viralização e crescimento longe do radar dos outros.</span></li>
+     <li><svg><use href="#medal"/></svg><span><strong>Exclusivo de fundador:</strong> depois das 30 vagas, a blindagem não é mais oferecida.</span></li>
+    </ul>
+    <div class="bonus-value"><span class="free">INCLUSO NO PLANO FUNDADOR</span></div>
+   </div>
+   <div class="mock" aria-hidden="true">
+    <div class="mock-bar"><i></i><i></i><i></i><span>Eyeon de outro usuário</span></div>
+    <div class="mock-label">ADICIONAR PERFIL</div>
+    <div class="mock-input"><span class="at">@</span>seucliente<span class="caret"></span><span class="mock-btn">Monitorar</span></div>
+    <div class="blocked">
+     <span class="benefit-icon"><svg><use href="#lock"/></svg></span>
+     <div><strong>Perfil blindado</strong><p>Este perfil é protegido por um Fundador Eyeon e não pode ser analisado.</p></div>
+    </div>
+    <div class="mock-rows">
+     <div><i><svg><use href="#lock"/></svg></i><s>Seguidores e crescimento</s></div>
+     <div><i><svg><use href="#lock"/></svg></i><s>Posts e viralização</s></div>
+     <div><i><svg><use href="#lock"/></svg></i><s>Análise com Eon AI</s></div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+</main>
+
+<nav class="nav" aria-label="Navegação dos slides">
+ <button type="button" id="prev" aria-label="Slide anterior"><svg><use href="#left"/></svg></button>
+ <div class="dots" id="dots"></div>
+ <button type="button" id="next" aria-label="Próximo slide"><svg><use href="#right"/></svg></button>
+</nav>
+
+<script>
+// ← → / espaço / clique para avançar; F para tela cheia; Ctrl+P exporta um slide por página.
+const slides=[...document.querySelectorAll('.slide')],dots=document.getElementById('dots');let current=0;
+slides.forEach((_,i)=>{const dot=document.createElement('span');dot.onclick=()=>go(i);dots.append(dot);});
+function go(index){current=Math.max(0,Math.min(slides.length-1,index));slides.forEach((s,i)=>s.classList.toggle('active',i===current));[...dots.children].forEach((d,i)=>d.classList.toggle('on',i===current));try{history.replaceState(null,'','#'+(current+1));}catch{}}
+function fit(){const scale=Math.min(innerWidth/1600,innerHeight/900);document.documentElement.style.setProperty('--scale',scale);}
+document.getElementById('prev').onclick=()=>go(current-1);document.getElementById('next').onclick=()=>go(current+1);
+addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(current+1);}else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(current-1);}else if(e.key.toLowerCase()==='f'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.();}});
+document.querySelector('.deck').addEventListener('click',e=>{if(!e.target.closest('.nav'))go(current+1);});
+// The controls fade out after 2 s without moving the mouse, so they never cover a slide while presenting.
+let idle;const wake=()=>{document.body.classList.remove('idle');clearTimeout(idle);idle=setTimeout(()=>document.body.classList.add('idle'),2000);};addEventListener('mousemove',wake);wake();
+addEventListener('resize',fit);fit();go((parseInt(location.hash.slice(1))||1)-1);
+</script>
+</body>
+</html>
