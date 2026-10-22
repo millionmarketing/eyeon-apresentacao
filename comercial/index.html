@@ -111,7 +111,7 @@ button.done{background:var(--green)}
   <h3>Bom saber</h3>
   <ul>
    <li>Todos os planos incluem Radar de viralização, alertas e Eon no Telegram, análises com IA agendadas, relatórios e favoritos.</li>
-   <li>O plano anual de fundador sai pelo preço de 10 meses (2 meses grátis).</li>
+   <li>No anual, o cliente paga 10 meses e leva 12 (2 meses grátis, 17% OFF), no preço cheio e no de fundador.</li>
    <li>Para cobrança automática todo mês ou todo ano, use os links de cartão. No Pix, o cliente paga de novo a cada período.</li>
    <li>Garantia de 7 dias ou o dinheiro de volta.</li>
    <li>Se o e-mail de acesso não chegar, o cliente usa “Esqueci minha senha” em app.eyeon.pro com o mesmo e-mail do pagamento (e confere o spam).</li>
@@ -125,13 +125,13 @@ button.done{background:var(--green)}
 const PLANS=[
  {key:'pro',name:'Pro',for:'Para social media freelancer',features:['5 perfis monitorados','Coleta a cada 3 horas','3 workspaces','Eon AI ilimitado'],
   founder:{monthly:[297,'https://buy.stripe.com/fZucN4eIWcqs4EO8By6J201'],yearly:[2970,'https://buy.stripe.com/4gM5kC44i4Y0efobNK6J203']},
-  full:{monthly:[497,'https://buy.stripe.com/cNibJ0cAOduw3AK6tq6J200'],yearly:[5964,'https://buy.stripe.com/aFa14mgR4bmob3c4li6J202']}},
+  full:{monthly:[497,'https://buy.stripe.com/cNibJ0cAOduw3AK6tq6J200'],yearly:[4970,'https://buy.stripe.com/fZu6oGcAO8acfjs5pm6J20c']}},
  {key:'studio',name:'Studio',for:'Para pequenas agências',featured:true,features:['10 perfis monitorados','Coleta a cada 2 horas','5 workspaces','Eon AI ilimitado'],
   founder:{monthly:[497,'https://buy.stripe.com/4gMaEWcAO3TWfjs4li6J205'],yearly:[4970,'https://buy.stripe.com/fZu28qgR4cqs8V4eZW6J207']},
-  full:{monthly:[797,'https://buy.stripe.com/dRm28qbwK0HK5ISbNK6J204'],yearly:[9564,'https://buy.stripe.com/28EaEW30ebmoefocRO6J206']}},
+  full:{monthly:[797,'https://buy.stripe.com/dRm28qbwK0HK5ISbNK6J204'],yearly:[7970,'https://buy.stripe.com/4gMbJ058m4Y0efo6tq6J20d']}},
  {key:'agencia',name:'Agência',for:'Para agências estruturadas',features:['20 perfis monitorados','Coleta a cada 1 hora','Workspaces ilimitados','Eon AI ilimitado'],
   founder:{monthly:[797,'https://buy.stripe.com/bJeaEW8kyduw6MW6tq6J209'],yearly:[7970,'https://buy.stripe.com/00wbJ0bwKeyAdbkbNK6J20b']},
-  full:{monthly:[1197,'https://buy.stripe.com/8x2aEWfN08ac4EOeZW6J208'],yearly:[14364,'https://buy.stripe.com/8x200icAO6242wG3he6J20a']}}
+  full:{monthly:[1197,'https://buy.stripe.com/8x2aEWfN08ac4EOeZW6J208'],yearly:[11970,'https://buy.stripe.com/28E9AS58m9eg1sC7xu6J20e']}}
 ];
 const PIX=(key,price)=>({monthly:`https://app.eyeon.pro/api/billing/pix?plan=${key}&cycle=monthly&price=${price}`,yearly:`https://app.eyeon.pro/api/billing/pix?plan=${key}&cycle=yearly&price=${price}`});
 const brl=v=>'R$ '+v.toLocaleString('pt-BR');
@@ -158,8 +158,9 @@ function render(target,tier){
    const pix=tier.startsWith('pix'),full=tier==='pixFull',[price,url]=pix?[plan[full?'full':'founder'][cycle][0],PIX(plan.key,full?'full':'founder')[cycle]]:plan[tier][cycle],offer=el('div','offer'),top=el('div','offer-top');
    const amount=el('span','price',brl(price));amount.append(el('small',null,cycle==='monthly'?' /mês':' /ano'));
    top.append(el('span','cycle',pix?(cycle==='monthly'?'PIX · 1 MÊS':'PIX · 1 ANO'):cycle==='monthly'?'MENSAL':'ANUAL'),amount);offer.append(top);
-   if(pix)offer.append(el('div','was',full?'preço cheio':`fundador · de ${brl(plan.full[cycle][0])}`));
-   if(tier==='founder'){const was=el('div','was');was.append('de ',el('s',null,brl(plan.full[cycle][0])),cycle==='yearly'?' · 2 meses grátis':'');offer.append(was);}
+   if(pix)offer.append(el('div','was',full?(cycle==='yearly'?'preço cheio · 17% OFF no anual':'preço cheio'):`fundador · de ${brl(plan.full[cycle][0])}`));
+   if(tier==='founder'){const was=el('div','was');was.append('de ',el('s',null,brl(cycle==='yearly'?plan.full.monthly[0]*12:plan.full[cycle][0])),cycle==='yearly'?' · 2 meses grátis':'');offer.append(was);}
+   if(tier==='full'&&cycle==='yearly')offer.append(el('div','was',`17% OFF · 2 meses grátis (de ${brl(plan.full.monthly[0]*12)})`));
    const row=el('div','link'),input=el('input');input.readOnly=true;input.value=url;input.setAttribute('aria-label',`Link ${plan.name} ${cycle==='monthly'?'mensal':'anual'}`);input.onclick=()=>input.select();
    const button=el('button','copy','Copiar link');button.type='button';button.onclick=()=>copy(url,button,`Link do ${plan.name} ${pix?'no Pix ':''}${cycle==='monthly'?'mensal':'anual'} copiado.`);
    row.append(input,button);offer.append(row);
