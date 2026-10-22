@@ -114,8 +114,8 @@ button.done{background:var(--green)}
    <li>O plano anual de fundador sai pelo preço de 10 meses (2 meses grátis).</li>
    <li>Para cobrança automática todo mês ou todo ano, use os links de cartão. No Pix, o cliente paga de novo a cada período.</li>
    <li>Garantia de 7 dias ou o dinheiro de volta.</li>
-   <li>Se o e-mail de acesso não chegar, o cliente usa “Esqueci minha senha” em eyeon.pro com o mesmo e-mail do pagamento (e confere o spam).</li>
-   <li>Troca de plano, cartão, faturas e cancelamento ficam em eyeon.pro, no botão Plano.</li>
+   <li>Se o e-mail de acesso não chegar, o cliente usa “Esqueci minha senha” em app.eyeon.pro com o mesmo e-mail do pagamento (e confere o spam).</li>
+   <li>Troca de plano, cartão, faturas e cancelamento ficam em app.eyeon.pro, no botão Plano.</li>
   </ul>
  </div>
 </div>
@@ -133,7 +133,7 @@ const PLANS=[
   founder:{monthly:[797,'https://buy.stripe.com/bJeaEW8kyduw6MW6tq6J209'],yearly:[7970,'https://buy.stripe.com/00wbJ0bwKeyAdbkbNK6J20b']},
   full:{monthly:[1197,'https://buy.stripe.com/8x2aEWfN08ac4EOeZW6J208'],yearly:[14364,'https://buy.stripe.com/8x200icAO6242wG3he6J20a']}}
 ];
-const PIX=(key,price)=>({monthly:`https://eyeon.pro/api/billing/pix?plan=${key}&cycle=monthly&price=${price}`,yearly:`https://eyeon.pro/api/billing/pix?plan=${key}&cycle=yearly&price=${price}`});
+const PIX=(key,price)=>({monthly:`https://app.eyeon.pro/api/billing/pix?plan=${key}&cycle=monthly&price=${price}`,yearly:`https://app.eyeon.pro/api/billing/pix?plan=${key}&cycle=yearly&price=${price}`});
 const brl=v=>'R$ '+v.toLocaleString('pt-BR');
 const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;};
 const toast=document.getElementById('toast');let timer;
@@ -144,8 +144,8 @@ async function copy(text,button,label){
 }
 function message(plan,cycle,founder,price,url,pix=false){
  const period=cycle==='monthly'?'por mês':'por ano';
- if(pix)return `Olá! Segue o link para pagar o Eyeon ${plan.name} no Pix: ${brl(price)} por ${cycle==='monthly'?'1 mês':'1 ano'} de acesso${founder?' (preço de fundador)':''}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: assim que o Pix for confirmado, você recebe um e-mail para criar sua senha e acessar eyeon.pro. Antes de vencer, enviamos um lembrete para renovar.`;
- return `Olá! Segue o link para assinar o Eyeon ${plan.name}${founder?' com preço de fundador':''}: ${brl(price)} ${period}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: logo depois do pagamento você recebe um e-mail para criar sua senha e acessar eyeon.pro.`;
+ if(pix)return `Olá! Segue o link para pagar o Eyeon ${plan.name} no Pix: ${brl(price)} por ${cycle==='monthly'?'1 mês':'1 ano'} de acesso${founder?' (preço de fundador)':''}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: assim que o Pix for confirmado, você recebe um e-mail para criar sua senha e acessar app.eyeon.pro. Antes de vencer, enviamos um lembrete para renovar.`;
+ return `Olá! Segue o link para assinar o Eyeon ${plan.name}${founder?' com preço de fundador':''}: ${brl(price)} ${period}.\n\n${plan.features.join(' · ')}.\n\n${url}\n\nO pagamento é feito na página segura da Stripe. Use o e-mail que você vai usar no Eyeon: logo depois do pagamento você recebe um e-mail para criar sua senha e acessar app.eyeon.pro.`;
 }
 function render(target,tier){
  const grid=document.getElementById(target);
